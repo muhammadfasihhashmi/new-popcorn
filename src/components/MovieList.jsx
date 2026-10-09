@@ -1,19 +1,38 @@
-function MovieList() {
+import { useEffect, useState } from "react";
+
+const apiUrl = "http://www.omdbapi.com/?apikey=f2eccca1";
+
+function MovieList({ query }) {
+  const [movies, setMovies] = useState([]);
+  useEffect(() => {
+    async function getMovies() {
+      if (!query) return;
+      try {
+        const response = await fetch(`${apiUrl}&s=${query}`);
+        if (!response.ok) throw new Error("some thing went wrong");
+        const data = await response.json();
+        if (data.Response === "False") throw new Error("Movie not found");
+        setMovies(data.Search);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    getMovies();
+  }, [query]);
   return (
     <ul className="list list-movies">
-      <li>
-        <img
-          src="https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg"
-          alt="Inception poster"
-        />
-        <h3>Inception</h3>
-        <div>
-          <p>
-            <span>🗓</span>
-            <span>2010</span>
-          </p>
-        </div>
-      </li>
+      {movies.map((movie) => (
+        <li key={movie.imdbID}>
+          <img src={movie.Poster} alt={`${movie.Title} poster`} />
+          <h3>{movie.Title}</h3>
+          <div>
+            <p>
+              <span>🗓</span>
+              <span>{movie.Year}</span>
+            </p>
+          </div>
+        </li>
+      ))}
     </ul>
   );
 }

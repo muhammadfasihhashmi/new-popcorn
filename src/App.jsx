@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Box from "./components/Box";
 import Header from "./components/Header";
 import Logo from "./components/Logo";
@@ -8,16 +9,18 @@ import WatchedMovieList from "./components/WatchedMovieList";
 import WatchedSummary from "./components/WatchedSummary";
 
 function App() {
+  const [query, setQuery] = useState("");
+
   return (
     <>
       <Header>
         <Logo />
-        <SearchBar />
+        <SearchBar query={query} setQuery={setQuery} />
         <SearchResult />
       </Header>
       <main className="main">
         <Box>
-          <MovieList />
+          <MovieList query={query} />
         </Box>
         <Box>
           <WatchedSummary />
