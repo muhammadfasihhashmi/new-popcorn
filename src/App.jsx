@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Box from "./components/Box";
 import Header from "./components/Header";
 import Logo from "./components/Logo";
@@ -10,17 +10,40 @@ import WatchedSummary from "./components/WatchedSummary";
 
 function App() {
   const [query, setQuery] = useState("");
+  const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    async function getMovies() {
+      if (!query) return;
+      try {
+        setLoading(true);
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}&s=${query}`,
+        );
+        if (!response.ok) throw new Error("some thing went wrong");
+        const data = await response.json();
+        if (data.Response === "False") throw new Error("Movie not found");
+        setMovies(data.Search);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    getMovies();
+  }, [query]);
 
   return (
     <>
       <Header>
         <Logo />
         <SearchBar query={query} setQuery={setQuery} />
-        <SearchResult />
+        <SearchResult movies={movies} />
       </Header>
       <main className="main">
         <Box>
-          <MovieList query={query} />
+          <MovieList movies={movies} loading={loading} />
         </Box>
         <Box>
           <WatchedSummary />
