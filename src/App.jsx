@@ -7,11 +7,13 @@ import SearchBar from "./components/SearchBar";
 import SearchResult from "./components/SearchResult";
 import WatchedMovieList from "./components/WatchedMovieList";
 import WatchedSummary from "./components/WatchedSummary";
+import MovieDetails from "./components/MovieDetails";
 
 function App() {
   const [query, setQuery] = useState("");
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [selectedMovie, setSelectedMovie] = useState(null);
 
   useEffect(() => {
     async function getMovies() {
@@ -43,13 +45,25 @@ function App() {
       </Header>
       <main className="main">
         <Box>
-          <MovieList movies={movies} loading={loading} />
+          <MovieList
+            movies={movies}
+            loading={loading}
+            setSelectedMovie={setSelectedMovie}
+          />
         </Box>
         <Box>
           <WatchedSummary />
           <WatchedMovieList />
         </Box>
       </main>
+      {selectedMovie && (
+        <div className="modal-overlay">
+          <MovieDetails
+            selectedMovie={selectedMovie}
+            setSelectedMovie={setSelectedMovie}
+          />
+        </div>
+      )}
     </>
   );
 }
