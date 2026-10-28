@@ -14,6 +14,7 @@ function App() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
+  const [watchedMovies, setWatchedMovies] = useState([]);
 
   useEffect(() => {
     async function getMovies() {
@@ -53,7 +54,7 @@ function App() {
         </Box>
         <Box>
           <WatchedSummary />
-          <WatchedMovieList />
+          <WatchedMovieList watchedMovies={watchedMovies} />
         </Box>
       </main>
       {selectedMovie && (
@@ -61,6 +62,7 @@ function App() {
           <MovieDetails
             selectedMovie={selectedMovie}
             setSelectedMovie={setSelectedMovie}
+            setWatchedMovies={setWatchedMovies}
           />
         </div>
       )}

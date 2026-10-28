@@ -1,28 +1,27 @@
-function WatchedMovieList() {
+function WatchedMovieList({ watchedMovies }) {
   return (
     <ul className="list">
-      <li>
-        <img
-          src="https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg"
-          alt="Inception poster"
-        />
-        <h3>Inception</h3>
-        <div>
-          <p>
-            <span>⭐️</span>
-            <span>8.8</span>
-          </p>
-          <p>
-            <span>🌟</span>
-            <span>10</span>
-          </p>
-          <p>
-            <span>⏳</span>
-            <span>148 min</span>
-          </p>
+      {watchedMovies.map((movie) => (
+        <li key={movie.imdbID}>
+          <img src={movie.Poster} alt={`${movie.Title} poster`} />
+          <h3>{movie.Title}</h3>
+          <div>
+            <p>
+              <span>⭐️</span>
+              <span>{movie.imdbRating}</span>
+            </p>
+            <p>
+              <span>🌟</span>
+              <span>{movie.userRating || "Not rated"}</span>
+            </p>
+            <p>
+              <span>⏳</span>
+              <span>{movie.runtime} min</span>
+            </p>
+          </div>
           <button className="btn-delete">X</button>
-        </div>
-      </li>
+        </li>
+      ))}
     </ul>
   );
 }
