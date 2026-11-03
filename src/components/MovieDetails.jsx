@@ -1,7 +1,12 @@
 import { ArrowLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 
-function MovieDetails({ selectedMovie, setSelectedMovie, setWatchedMovies }) {
+function MovieDetails({
+  selectedMovie,
+  setSelectedMovie,
+  setWatchedMovies,
+  watchedMovies,
+}) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [movieDetails, setMovieDetails] = useState(null);
@@ -55,7 +60,10 @@ function MovieDetails({ selectedMovie, setSelectedMovie, setWatchedMovies }) {
     setSelectedMovie(null);
   }
 
-  ("130 min");
+  const isMatched = watchedMovies.some(
+    (movie) => selectedMovie === movie.imdbID,
+  );
+
   return (
     <>
       {loading && <div className="loader spinner"></div>}
@@ -83,11 +91,13 @@ function MovieDetails({ selectedMovie, setSelectedMovie, setWatchedMovies }) {
             </div>
           </header>
           <section>
-            <div className="rating">
-              <button className="btn-add" onClick={handleAdd}>
-                + Add to list
-              </button>
-            </div>
+            {!isMatched && (
+              <div className="rating">
+                <button className="btn-add" onClick={handleAdd}>
+                  + Add to list
+                </button>
+              </div>
+            )}
             {/* <div className="rating">
               {isMatched ? (
                 `Your given rating is ${matchedMovie.userRating} ⭐`

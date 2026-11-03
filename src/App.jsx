@@ -14,7 +14,15 @@ function App() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
-  const [watchedMovies, setWatchedMovies] = useState([]);
+  const [watchedMovies, setWatchedMovies] = useState(() => {
+    const raw = localStorage.getItem("watched");
+    if (raw) return JSON.parse(raw);
+    return [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("watched", JSON.stringify(watchedMovies));
+  }, [watchedMovies]);
 
   useEffect(() => {
     async function getMovies() {
@@ -53,7 +61,7 @@ function App() {
           />
         </Box>
         <Box>
-          <WatchedSummary />
+          <WatchedSummary watchedMovies={watchedMovies} />
           <WatchedMovieList watchedMovies={watchedMovies} />
         </Box>
       </main>
@@ -63,6 +71,7 @@ function App() {
             selectedMovie={selectedMovie}
             setSelectedMovie={setSelectedMovie}
             setWatchedMovies={setWatchedMovies}
+            watchedMovies={watchedMovies}
           />
         </div>
       )}
